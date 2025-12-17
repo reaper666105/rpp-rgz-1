@@ -281,8 +281,11 @@ def report_summary():
         return Response(
             csv_text,
             status=200,
-            mimetype="text/csv",
-            headers={"Content-Disposition": "inline; filename=summary.csv"},
+            mimetype="text/csv; charset=utf-8",
+            headers={
+                "Content-Disposition": "attachment; filename=inventory_summary.csv",
+                "Content-Type": "text/csv; charset=utf-8",
+            },
         )
 
     return jsonify(summary)

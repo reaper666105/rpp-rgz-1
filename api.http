@@ -160,6 +160,8 @@ Content-Type: {{contentType}}
 GET {{baseUrl}}/reports/summary
 
 ### 4.2. Сводный отчёт в формате CSV
+### В REST Client: правый клик на ответ → "Save Response" → сохранить как .csv
+### Или используй curl: curl.exe "{{baseUrl}}/reports/summary?format=csv" -o summary.csv
 GET {{baseUrl}}/reports/summary?format=csv
 
 ### ============================================
