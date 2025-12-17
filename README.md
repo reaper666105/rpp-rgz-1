@@ -14,18 +14,14 @@
 В корне проекта:
 
 ```powershell
-docker compose up -d
+docker compose -p rgz up -d
 ```
+
+**Важно:** Если на твоей системе уже запущен PostgreSQL на порту 5432, docker-compose автоматически использует порт 5433 для контейнера. Убедись, что в `.env` указан правильный порт (5433, если локальный PostgreSQL занял 5432).
 
 Параметры БД уже совпадают с `env.example`.
 
 Если Docker Desktop не запущен, `docker compose` может ругаться на отсутствие Docker Engine — просто запусти Docker Desktop и повтори команду.
-
-Если встретишь ошибку `project name must not be empty`, используй явное имя проекта:
-
-```powershell
-docker compose -p rgz up -d
-```
 
 #### 2.2. Установить зависимости и запустить API
 
@@ -69,9 +65,8 @@ curl.exe http://127.0.0.1:5000/health
 #### 4.1. Создание товара
 
 ```powershell
-curl.exe -X POST http://127.0.0.1:5000/items `
-  -H "Content-Type: application/json" `
-  -d "{\"name\":\"Keyboard\",\"quantity\":10,\"price\":2500.50,\"category\":\"electronics\"}"
+$body = '{"name":"Keyboard","quantity":10,"price":2500.50,"category":"electronics"}'
+curl.exe -X POST http://127.0.0.1:5000/items -H "Content-Type: application/json" -d $body
 ```
 
 #### 4.2. Список товаров + фильтр по категории
@@ -84,9 +79,8 @@ curl.exe "http://127.0.0.1:5000/items?category=electronics"
 #### 4.3. Обновление товара
 
 ```powershell
-curl.exe -X PUT http://127.0.0.1:5000/items/1 `
-  -H "Content-Type: application/json" `
-  -d "{\"quantity\":8}"
+$body = '{"quantity":8}'
+curl.exe -X PUT http://127.0.0.1:5000/items/1 -H "Content-Type: application/json" -d $body
 ```
 
 #### 4.4. Удаление товара

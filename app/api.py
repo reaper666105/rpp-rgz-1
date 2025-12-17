@@ -60,6 +60,29 @@ def _as_decimal(value, field: str) -> tuple[Decimal | None, tuple | None]:
     return None, _json_error(f"Field '{field}' must be a number.", status_code=400)
 
 
+@api_bp.get("/")
+def root():
+    """Информация об API."""
+    return jsonify({
+        "name": "Inventory Management API",
+        "version": "1.0",
+        "endpoints": {
+            "health": "/health",
+            "items": {
+                "POST /items": "Создать товар",
+                "GET /items": "Список товаров (опционально ?category=...)",
+                "GET /items/<id>": "Получить товар по ID",
+                "PUT /items/<id>": "Обновить товар",
+                "DELETE /items/<id>": "Удалить товар",
+            },
+            "reports": {
+                "GET /reports/summary": "Сводный отчёт (JSON)",
+                "GET /reports/summary?format=csv": "Сводный отчёт (CSV)",
+            },
+        },
+    })
+
+
 @api_bp.get("/health")
 def health():
     try:
