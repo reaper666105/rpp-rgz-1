@@ -4,6 +4,8 @@ import csv
 import io
 from decimal import Decimal, InvalidOperation
 
+import json
+
 from flask import Blueprint, Response, jsonify, request
 from sqlalchemy import func, text
 
@@ -63,7 +65,7 @@ def _as_decimal(value, field: str) -> tuple[Decimal | None, tuple | None]:
 @api_bp.get("/")
 def root():
     """Информация об API."""
-    return jsonify({
+    data = {
         "name": "Inventory Management API",
         "version": "1.0",
         "endpoints": {
@@ -80,7 +82,13 @@ def root():
                 "GET /reports/summary?format=csv": "Сводный отчёт (CSV)",
             },
         },
-    })
+    }
+    # Используем Response напрямую с ensure_ascii=False для читаемого русского текста
+    response = Response(
+        json.dumps(data, ensure_ascii=False, indent=2),
+        mimetype='application/json; charset=utf-8'
+    )
+    return response
 
 
 @api_bp.get("/health")

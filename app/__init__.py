@@ -22,6 +22,7 @@ def create_app(test_config: dict | None = None) -> Flask:
     app.config.from_mapping(
         SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL", "sqlite:///inventory.db"),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        JSON_AS_ASCII=False,  # Отключаем экранирование Unicode для читаемого JSON
     )
 
     if test_config:

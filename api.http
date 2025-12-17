@@ -1,0 +1,221 @@
+### Inventory Management API - Тестовые запросы
+### Используй REST Client расширение в VS Code или IntelliJ IDEA
+### Просто кликай на "Send Request" над каждым запросом
+
+@baseUrl = http://127.0.0.1:5000
+@contentType = application/json
+
+### ============================================
+### 1. ИНФОРМАЦИЯ ОБ API
+### ============================================
+
+### Получить информацию об API
+GET {{baseUrl}}/
+
+### Проверка работоспособности (Health Check)
+GET {{baseUrl}}/health
+
+### ============================================
+### 2. УПРАВЛЕНИЕ ТОВАРАМИ (CRUD)
+### ============================================
+
+### 2.1. Создание товара
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Клавиатура",
+  "quantity": 10,
+  "price": 2500.50,
+  "category": "электроника"
+}
+
+### 2.2. Создание ещё одного товара
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Мышь",
+  "quantity": 5,
+  "price": 999.99,
+  "category": "электроника"
+}
+
+### 2.3. Создание товара другой категории
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Стол",
+  "quantity": 2,
+  "price": 5000.00,
+  "category": "мебель"
+}
+
+### 2.4. Создание товара с нулевым количеством (для демонстрации отчёта)
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Стул",
+  "quantity": 0,
+  "price": 2000.00,
+  "category": "мебель"
+}
+
+### 2.5. Получить список всех товаров
+GET {{baseUrl}}/items
+
+### 2.6. Получить список товаров с фильтром по категории
+GET {{baseUrl}}/items?category=электроника
+
+### 2.7. Получить список товаров другой категории
+GET {{baseUrl}}/items?category=мебель
+
+### 2.8. Получить конкретный товар по ID (замените 1 на реальный ID)
+GET {{baseUrl}}/items/1
+
+### 2.9. Обновить товар (частичное обновление - только количество)
+PUT {{baseUrl}}/items/1
+Content-Type: {{contentType}}
+
+{
+  "quantity": 8
+}
+
+### 2.10. Обновить товар (несколько полей)
+PUT {{baseUrl}}/items/1
+Content-Type: {{contentType}}
+
+{
+  "name": "Клавиатура механическая",
+  "quantity": 12,
+  "price": 3500.00
+}
+
+### 2.11. Удалить товар (замените 1 на реальный ID)
+DELETE {{baseUrl}}/items/1
+
+### ============================================
+### 3. ВАЛИДАЦИЯ ДАННЫХ (примеры ошибок)
+### ============================================
+
+### 3.1. Попытка создать товар с отрицательным количеством
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Тест",
+  "quantity": -1,
+  "price": 100,
+  "category": "test"
+}
+
+### 3.2. Попытка создать товар с нулевой ценой
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Тест",
+  "quantity": 10,
+  "price": 0,
+  "category": "test"
+}
+
+### 3.3. Попытка создать товар без обязательных полей
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Тест"
+}
+
+### 3.4. Попытка создать товар с пустым именем
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "",
+  "quantity": 10,
+  "price": 100,
+  "category": "test"
+}
+
+### 3.5. Попытка получить несуществующий товар
+GET {{baseUrl}}/items/99999
+
+### 3.6. Попытка обновить несуществующий товар
+PUT {{baseUrl}}/items/99999
+Content-Type: {{contentType}}
+
+{
+  "quantity": 5
+}
+
+### ============================================
+### 4. ОТЧЁТЫ
+### ============================================
+
+### 4.1. Сводный отчёт в формате JSON
+GET {{baseUrl}}/reports/summary
+
+### 4.2. Сводный отчёт в формате CSV
+GET {{baseUrl}}/reports/summary?format=csv
+
+### ============================================
+### 5. ПОЛНЫЙ СЦЕНАРИЙ ДЛЯ ДЕМОНСТРАЦИИ
+### ============================================
+
+### Шаг 1: Создать несколько товаров
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Монитор",
+  "quantity": 3,
+  "price": 15000.00,
+  "category": "электроника"
+}
+
+###
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Кресло",
+  "quantity": 1,
+  "price": 8000.00,
+  "category": "мебель"
+}
+
+###
+POST {{baseUrl}}/items
+Content-Type: {{contentType}}
+
+{
+  "name": "Коврик для мыши",
+  "quantity": 0,
+  "price": 500.00,
+  "category": "аксессуары"
+}
+
+### Шаг 2: Получить все товары
+GET {{baseUrl}}/items
+
+### Шаг 3: Получить отчёт по категориям
+GET {{baseUrl}}/reports/summary
+
+### Шаг 4: Обновить количество одного товара
+PUT {{baseUrl}}/items/1
+Content-Type: {{contentType}}
+
+{
+  "quantity": 15
+}
+
+### Шаг 5: Получить обновлённый отчёт
+GET {{baseUrl}}/reports/summary
+
+### Шаг 6: Экспортировать отчёт в CSV
+GET {{baseUrl}}/reports/summary?format=csv
+
